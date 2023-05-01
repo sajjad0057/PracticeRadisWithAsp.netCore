@@ -9,6 +9,13 @@ namespace AspNetCoreDistributedCache.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Configure Radis
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetSection("RedisConnection").GetValue<string>("Configuration");
+                options.InstanceName = builder.Configuration.GetSection("RedisConnection").GetValue<string>("InstanceName");
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
