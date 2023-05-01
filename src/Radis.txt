@@ -21,3 +21,12 @@ especially when the data changes frequently as in a few seconds.
 
 #Storing high transient data, for example, data that is created and deleted after 
 a very short period of time.
+
+=====================================================================================
+ Redis, which is a popular open-source, in-memory data structure store that can be
+ used as a cache server. Redis allows you to store and retrieve data quickly by
+ keeping it in memory, which makes it faster than traditional disk-based databases.
+ Additionally, Redis supports a variety of data structures, including strings,
+ hashes,lists, sets, and sorted sets, which makes it a flexible tool for a wide
+ range of applications. Overall, Redis can be a very effective caching solution
+ for applications that require fast data access and retrieval.
