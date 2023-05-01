@@ -1,0 +1,11 @@
+﻿@{
+    var dashboardData = (DashboardData)ViewBag.DashboardData;
+}
+<div>
+    <hr />
+    <h3>Total Customers : @dashboardData.TotalCustomerCount</h3>
+    <h3>Total Revenue : @dashboardData.TotalRevenue</h3>
+    <h3>Top Selling Product: @dashboardData.TopSellingProductName</h3>
+    <h3>Top Selling Country: @dashboardData.TopSellingCountryName</h3>
+    <hr />
+</div>

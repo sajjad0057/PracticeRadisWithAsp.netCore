@@ -51,5 +51,19 @@ namespace AspNetCoreDistributedCache.Web.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            var jsonData = await _distributedCache.GetStringAsync("DashboardData");
+
+            var dashboardData = new DashboardData();
+
+            if (jsonData is not null)
+                dashboardData = JsonConvert.DeserializeObject<DashboardData>(jsonData);
+
+            ViewBag.DashboardData = dashboardData;
+
+            return View();
+        }
     }
 }

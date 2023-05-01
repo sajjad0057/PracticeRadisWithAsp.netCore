@@ -9,6 +9,7 @@ namespace AspNetCoreDistributedCache.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            #region Configure Radis
             // Configure Radis
             builder.Services.AddStackExchangeRedisCache(options =>
             {
@@ -16,6 +17,7 @@ namespace AspNetCoreDistributedCache.Web
                 //// InstanceName will be set prefix for each kay which are use for cacheing data
                 options.InstanceName = builder.Configuration.GetSection("RedisConnection").GetValue<string>("InstanceName");
             });
+            #endregion
 
             var app = builder.Build();
 
