@@ -1,32 +1,55 @@
 ﻿using AspNetCoreDistributedCache.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace AspNetCoreDistributedCache.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IDistributedCache _distributedCache;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IDistributedCache distributedCache)
         {
             _logger = logger;
+            _distributedCache = distributedCache;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> SaveRedisCache()
         {
+            try
+            {
+                var dashboardData = new DashboardData
+                {
+                    TotalCustomerCount = 110020,
+                    TotalRevenue = 12000,
+                    TopSellingCountryName = "USA",
+                    TopSellingProductName = "Macbook Pro"
+                };
+
+                var tomorrow = DateTime.Now.Date.AddDays(1);
+                var totalSeconds = tomorrow.Subtract(DateTime.Now).TotalSeconds;
+
+                #region Manage Cache data expiration time
+                /* Manage cache data expiration time */
+                var distributedCacheEntryOptions = new DistributedCacheEntryOptions();
+                distributedCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(totalSeconds);
+                //distributedCacheEntryOptions.SlidingExpiration = TimeSpan.FromHours(1);
+                distributedCacheEntryOptions.SlidingExpiration = null;
+                #endregion
+
+                var jsonData = JsonConvert.SerializeObject(dashboardData);
+
+                await _distributedCache.SetStringAsync("DashboardData", jsonData, distributedCacheEntryOptions);
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message, ex.StackTrace);
+            }
+
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

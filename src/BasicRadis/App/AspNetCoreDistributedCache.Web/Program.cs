@@ -13,6 +13,7 @@ namespace AspNetCoreDistributedCache.Web
             builder.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = builder.Configuration.GetSection("RedisConnection").GetValue<string>("Configuration");
+                //// InstanceName will be set prefix for each kay which are use for cacheing data
                 options.InstanceName = builder.Configuration.GetSection("RedisConnection").GetValue<string>("InstanceName");
             });
 
